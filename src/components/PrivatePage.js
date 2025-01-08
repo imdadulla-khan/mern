@@ -4,12 +4,11 @@ const PrivatePage = ({ token }) => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
 
-  // Fetch tasks from the API
   const fetchTasks = async () => {
     try {
       const response = await fetch("http://localhost:4000/api/tasks", {
         headers: {
-          Authorization: `Bearer ${token}`, // Pass token for authentication
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -24,7 +23,6 @@ const PrivatePage = ({ token }) => {
     }
   };
 
-  // Add a new task to the API
   const addTask = async () => {
     if (!newTask.trim()) {
       alert("Task cannot be empty!");
@@ -36,7 +34,7 @@ const PrivatePage = ({ token }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Pass token for authentication
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ task: newTask }),
       });
@@ -45,19 +43,18 @@ const PrivatePage = ({ token }) => {
         throw new Error(`Error: ${response.statusText}`);
       }
 
-      setNewTask(""); // Clear input field
-      fetchTasks(); // Refresh the task list
+      setNewTask("");
+      fetchTasks();
     } catch (err) {
       console.error("Failed to add task:", err.message);
     }
   };
 
-  // Fetch tasks on component mount
   useEffect(() => {
     if (token) {
       fetchTasks();
     }
-  });
+  }, [token]); // Added dependency array
 
   return (
     <div>
